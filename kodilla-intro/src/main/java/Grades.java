@@ -21,11 +21,11 @@ public class Grades {
             return grades[size - 1];
         } else {
             System.out.println("No grades in the table.");
-            return -1;
+            return 0;
         }
     }
 
-    public double AverageGrade() {
+    public double averageGrade() {
         if (size == 0) {
             System.out.println("No grades in the table.");
             return 0;
@@ -35,14 +35,5 @@ public class Grades {
             sum += grades[i];
         }
         return (double) sum / size;
-    }
-    public static void main(String[] args) {
-        Grades grades = new Grades();
-        grades.add(5);
-        grades.add(4);
-        grades.add(3);
-
-        System.out.println("Last added grade: " + grades.LastGrade());
-        System.out.println("Average grade: " + grades.AverageGrade());
     }
 }

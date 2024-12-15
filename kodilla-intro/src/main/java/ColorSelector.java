@@ -10,19 +10,38 @@ public class ColorSelector {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the first letter of the color:");
         String letter = scanner.nextLine().trim().toUpperCase();
+        String color;
 
         switch (letter) {
-            case "R": return "Red";
-            case "G": return "Green";
-            case "B": return "Blue";
-            case "Y": return "Yellow";
-            case "O": return "Orange";
-            case "P": return "Purple";
-            case "W": return "White";
-            case "K": return "Black";
+            case "R":
+                color = "Red";
+                break;
+            case "G":
+                color = "Green";
+                break;
+            case "B":
+                color = "Blue";
+                break;
+            case "Y":
+                color = "Yellow";
+                break;
+            case "O":
+                color = "Orange";
+                break;
+            case "P":
+                color = "Purple";
+                break;
+            case "W":
+                color = "White";
+                break;
+            case "K":
+                color = "Black";
+                break;
             default:
-                System.out.println("Unknown color. Try again.");
-                return getColorByFirstLetter();
+                color = "Unknown color";
+                break;
         }
+        return
+                color;
     }
 }

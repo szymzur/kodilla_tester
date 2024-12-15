@@ -1,48 +1,53 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class RandomNumbers {
-    private List<Integer> numbers = new ArrayList<>();
-    private Random random = new Random();
+    private int[] numbers = new int[5000];
+    private int index = 0;
     private int sum = 0;
 
-    // Metoda losująca liczby do momentu przekroczenia sumy 5000
     public void generateNumbers() {
         while (sum <= 5000) {
-            int number = random.nextInt(31); // Losuje liczbę z zakresu 0-30 (31 nie jest włączone)
-            numbers.add(number);
-            sum += number;
+            int number = (int) (Math.random() * 31);
+            if (index < numbers.length) {
+                numbers[index] = number;
+                index++;
+                sum += number;
+            } else {
+                int[] newNumbers = new int[numbers.length * 2];
+                System.arraycopy(numbers, 0, newNumbers, 0, numbers.length);
+                numbers = newNumbers;
+                numbers[index] = number;
+                index++;
+                sum += number;
+            }
         }
     }
 
-    // Metoda zwracająca największą wylosowaną wartość
     public int getMaxNumber() {
         int max = Integer.MIN_VALUE;
-        for (int number : numbers) {
-            if (number > max) {
-                max = number;
+        for (int i = 0; i < index; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
             }
         }
         return max;
     }
 
-    // Metoda zwracająca najmniejszą wylosowaną wartość
     public int getMinNumber() {
         int min = Integer.MAX_VALUE;
-        for (int number : numbers) {
-            if (number < min) {
-                min = number;
+        for (int i = 0; i < index; i++) {
+            if (numbers[i] < min) {
+                min = numbers[i];
             }
         }
         return min;
     }
 
-    public static void main(String[] args) {
-        RandomNumbers randomNumbers = new RandomNumbers();
-        randomNumbers.generateNumbers();
-        System.out.println("Random numbers: " + randomNumbers.numbers);
-        System.out.println("The highest number: " + randomNumbers.getMaxNumber());
-        System.out.println("The lowest number: " + randomNumbers.getMinNumber());
+    public int[] getNumbers() {
+        return numbers;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
+// Użyłem getterów by zwrócić tablice numbers i index, doczytałem, że to lepsza praktyka w programowaniu obiektowym.
+//

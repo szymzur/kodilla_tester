@@ -11,6 +11,6 @@ public class Calculator {
     }
 
     public int square(int a) {
-        return a * a;
+        return (int) Math.pow(a, 2);
     }
 }

@@ -8,7 +8,7 @@ public class Student {
     private Grades geography;
     private Grades history;
 
-    public Student(String name) {
+        public Student(String name) {
         this.name = name;
         this.maths = new Grades();
         this.physics = new Grades();
@@ -54,5 +54,10 @@ public class Student {
 
     public double getHistoryAverage() {
         return this.history.getAverage();
+    }
+
+    public double getAverage() {
+        double sum = this.geography.getAverage() + this.history.getAverage() + this.maths.getAverage() + this.physics.getAverage();
+        return sum/4;
     }
 }

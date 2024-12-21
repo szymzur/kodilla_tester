@@ -51,4 +51,25 @@ public class StudentTestSuite {
         assertEquals(0, mathsAverage, 0.01);
         assertEquals(3, physicsAverage, 0.01);
     }
+
+    @Test
+    public void averageShouldBeZeroIfStudentDoesntHaveGrades() {
+        Student student = new Student("Martin");
+        student.addGeographyGrade(4);
+        student.addGeographyGrade(4);
+        student.addGeographyGrade(2);
+        student.addGeographyGrade(-2);
+        student.addGeographyGrade(4);
+        student.addGeographyGrade(8);
+
+        student.addHistoryGrade(1);
+        student.addHistoryGrade(5);
+
+        student.addMathGrade(0);
+
+        student.addPhysicsGrade(19);
+        student.addPhysicsGrade(3);
+        student.addPhysicsGrade(3);
+        assertEquals(2.375, student.getAverage(), 0.001);
+    }
 }

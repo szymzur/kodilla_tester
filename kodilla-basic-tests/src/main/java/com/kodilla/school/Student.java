@@ -13,7 +13,7 @@ public class Student {
         this.maths = new Grades();
         this.physics = new Grades();
         this.geography = new Grades();
-        this. history = new Grades();
+        this.history = new Grades();
     }
 
     public void addMathGrade(int grade) {

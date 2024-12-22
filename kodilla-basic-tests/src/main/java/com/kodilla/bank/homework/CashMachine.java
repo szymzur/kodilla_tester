@@ -10,7 +10,7 @@ public class CashMachine {
     }
 
     public void addTransaction(int amount) {
-        this.transactions.add(amount);
+        transactions.add(amount);
     }
 
     public int getBalance() {

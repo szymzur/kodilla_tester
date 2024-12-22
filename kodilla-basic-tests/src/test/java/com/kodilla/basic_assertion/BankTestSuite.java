@@ -7,10 +7,17 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BankTestSuite {
+    private CashMachine cashMachine;
+    private Bank bank;
+
+    @BeforeEach
+    public void setUp() {
+        cashMachine = new CashMachine();
+        bank = new Bank();
+    }
 
     @Test
     public void testCashMachineBalance() {
-        CashMachine cashMachine = new CashMachine();
         cashMachine.addTransaction(100);
         cashMachine.addTransaction(-50);
         cashMachine.addTransaction(200);
@@ -20,7 +27,6 @@ public class BankTestSuite {
 
     @Test
     public void testCashMachineTransactionCount() {
-        CashMachine cashMachine = new CashMachine();
         cashMachine.addTransaction(100);
         cashMachine.addTransaction(-50);
         cashMachine.addTransaction(200);
@@ -38,7 +44,6 @@ public class BankTestSuite {
         cm2.addTransaction(200);
         cm2.addTransaction(-100);
 
-        Bank bank = new Bank();
         bank.addCashMachine(cm1);
         bank.addCashMachine(cm2);
 
@@ -55,7 +60,6 @@ public class BankTestSuite {
         cm2.addTransaction(200);
         cm2.addTransaction(-100);
 
-        Bank bank = new Bank();
         bank.addCashMachine(cm1);
         bank.addCashMachine(cm2);
 
@@ -72,7 +76,6 @@ public class BankTestSuite {
         cm2.addTransaction(200);
         cm2.addTransaction(-100);
 
-        Bank bank = new Bank();
         bank.addCashMachine(cm1);
         bank.addCashMachine(cm2);
 
@@ -85,7 +88,6 @@ public class BankTestSuite {
         cm1.addTransaction(-50);
         cm1.addTransaction(-100);
 
-        Bank bank = new Bank();
         bank.addCashMachine(cm1);
 
         assertEquals(-75.0, bank.getAverageWithdrawal(), 1e-9);
@@ -97,7 +99,6 @@ public class BankTestSuite {
         cm1.addTransaction(100);
         cm1.addTransaction(200);
 
-        Bank bank = new Bank();
         bank.addCashMachine(cm1);
 
         assertEquals(150.0, bank.getAverageDeposit(), 1e-9);

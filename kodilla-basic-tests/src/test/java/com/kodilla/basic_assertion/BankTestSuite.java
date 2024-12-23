@@ -18,12 +18,6 @@ public class BankTestSuite {
         bank = new Bank();
         cm1 = new CashMachine();
         cm2 = new CashMachine();
-
-        cm1.addTransaction(100);
-        cm1.addTransaction(-50);
-        cm2.addTransaction(200);
-        cm2.addTransaction(-100);
-
         bank.addCashMachine(cm1);
         bank.addCashMachine(cm2);
     }

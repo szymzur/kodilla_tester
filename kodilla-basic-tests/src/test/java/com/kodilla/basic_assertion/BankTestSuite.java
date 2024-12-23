@@ -9,11 +9,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BankTestSuite {
     private CashMachine cashMachine;
     private Bank bank;
+    private CashMachine cm1;
+    private CashMachine cm2;
 
     @BeforeEach
     public void setUp() {
         cashMachine = new CashMachine();
         bank = new Bank();
+        cm1 = new CashMachine();
+        cm2 = new CashMachine();
+
+        cm1.addTransaction(100);
+        cm1.addTransaction(-50);
+        cm2.addTransaction(200);
+        cm2.addTransaction(-100);
+
+        bank.addCashMachine(cm1);
+        bank.addCashMachine(cm2);
     }
 
     @Test
@@ -36,71 +48,38 @@ public class BankTestSuite {
 
     @Test
     public void testBankTotalBalance() {
-        CashMachine cm1 = new CashMachine();
-        cm1.addTransaction(100);
-        cm1.addTransaction(-50);
-
-        CashMachine cm2 = new CashMachine();
-        cm2.addTransaction(200);
-        cm2.addTransaction(-100);
-
-        bank.addCashMachine(cm1);
-        bank.addCashMachine(cm2);
-
         assertEquals(150, bank.getTotalBalance());
     }
 
     @Test
     public void testBankTotalWithdrawals() {
-        CashMachine cm1 = new CashMachine();
-        cm1.addTransaction(100);
-        cm1.addTransaction(-50);
-
-        CashMachine cm2 = new CashMachine();
-        cm2.addTransaction(200);
-        cm2.addTransaction(-100);
-
-        bank.addCashMachine(cm1);
-        bank.addCashMachine(cm2);
-
         assertEquals(2, bank.getTotalWithdrawals());
     }
 
     @Test
     public void testBankTotalDeposits() {
-        CashMachine cm1 = new CashMachine();
-        cm1.addTransaction(100);
-        cm1.addTransaction(-50);
-
-        CashMachine cm2 = new CashMachine();
-        cm2.addTransaction(200);
-        cm2.addTransaction(-100);
-
-        bank.addCashMachine(cm1);
-        bank.addCashMachine(cm2);
-
         assertEquals(2, bank.getTotalDeposits());
     }
 
     @Test
     public void testBankAverageWithdrawal() {
-        CashMachine cm1 = new CashMachine();
-        cm1.addTransaction(-50);
-        cm1.addTransaction(-100);
+        Bank newBank = new Bank();
+        CashMachine newCM1 = new CashMachine();
+        newCM1.addTransaction(-50);
+        newCM1.addTransaction(-100);
+        newBank.addCashMachine(newCM1);
 
-        bank.addCashMachine(cm1);
-
-        assertEquals(-75.0, bank.getAverageWithdrawal(), 1e-9);
+        assertEquals(-75.0, newBank.getAverageWithdrawal(), 1e-9);
     }
 
     @Test
     public void testBankAverageDeposit() {
-        CashMachine cm1 = new CashMachine();
-        cm1.addTransaction(100);
-        cm1.addTransaction(200);
+        Bank newBank = new Bank();
+        CashMachine newCM1 = new CashMachine();
+        newCM1.addTransaction(100);
+        newCM1.addTransaction(200);
+        newBank.addCashMachine(newCM1);
 
-        bank.addCashMachine(cm1);
-
-        assertEquals(150.0, bank.getAverageDeposit(), 1e-9);
+        assertEquals(150.0, newBank.getAverageDeposit(), 1e-9);
     }
 }

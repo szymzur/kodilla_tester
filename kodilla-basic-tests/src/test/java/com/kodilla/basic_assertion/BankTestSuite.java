@@ -11,6 +11,8 @@ public class BankTestSuite {
     private Bank bank;
     private CashMachine cm1;
     private CashMachine cm2;
+    private Bank newBank;
+    private CashMachine newCM1;
 
     @BeforeEach
     public void setUp() {
@@ -18,8 +20,8 @@ public class BankTestSuite {
         bank = new Bank();
         cm1 = new CashMachine();
         cm2 = new CashMachine();
-        bank.addCashMachine(cm1);
-        bank.addCashMachine(cm2);
+        newBank = new Bank();
+        newCM1 = new CashMachine();
     }
 
     @Test
@@ -42,23 +44,45 @@ public class BankTestSuite {
 
     @Test
     public void testBankTotalBalance() {
+        cm1.addTransaction(100);
+        cm1.addTransaction(-50);
+        cm2.addTransaction(200);
+        cm2.addTransaction(-100);
+
+        bank.addCashMachine(cm1);
+        bank.addCashMachine(cm2);
+
         assertEquals(150, bank.getTotalBalance());
     }
 
     @Test
     public void testBankTotalWithdrawals() {
+        cm1.addTransaction(100);
+        cm1.addTransaction(-50);
+        cm2.addTransaction(200);
+        cm2.addTransaction(-100);
+
+        bank.addCashMachine(cm1);
+        bank.addCashMachine(cm2);
+
         assertEquals(2, bank.getTotalWithdrawals());
     }
 
     @Test
     public void testBankTotalDeposits() {
+        cm1.addTransaction(100);
+        cm1.addTransaction(-50);
+        cm2.addTransaction(200);
+        cm2.addTransaction(-100);
+
+        bank.addCashMachine(cm1);
+        bank.addCashMachine(cm2);
+
         assertEquals(2, bank.getTotalDeposits());
     }
 
     @Test
     public void testBankAverageWithdrawal() {
-        Bank newBank = new Bank();
-        CashMachine newCM1 = new CashMachine();
         newCM1.addTransaction(-50);
         newCM1.addTransaction(-100);
         newBank.addCashMachine(newCM1);
@@ -68,8 +92,6 @@ public class BankTestSuite {
 
     @Test
     public void testBankAverageDeposit() {
-        Bank newBank = new Bank();
-        CashMachine newCM1 = new CashMachine();
         newCM1.addTransaction(100);
         newCM1.addTransaction(200);
         newBank.addCashMachine(newCM1);

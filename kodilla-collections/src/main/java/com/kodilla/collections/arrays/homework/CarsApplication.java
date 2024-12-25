@@ -10,32 +10,46 @@ import java.util.Random;
 public class CarsApplication {
     private static final Random random = new Random();
 
+    static class CarWithNames {
+        String name;
+        Car car;
+
+        CarWithNames(String name, Car car) {
+            this.name = name;
+            this.car = car;
+        }
+    }
+
     public static void main(String[] args) {
         int arraySize = random.nextInt(15) + 1;
-        Car[] cars = new Car[arraySize];
+        CarWithNames[] cars = new CarWithNames[arraySize];
 
         for (int i = 0; i < arraySize; i++) {
             cars[i] = drawCar();
         }
 
-        for (Car car : cars) {
-            CarUtils.describeCar(car);
+        for (CarWithNames carWithName : cars) {
+            CarUtils.describeCar(carWithName.name, carWithName.car);
         }
     }
 
-    public static Car drawCar() {
+    public static CarWithNames drawCar() {
         int carType = random.nextInt(3);
         Car car;
+        String carName;
 
         switch (carType) {
             case 0:
                 car = new Suzuki();
+                carName = "Suzuki";
                 break;
             case 1:
                 car = new Toyota();
+                carName = "Toyota";
                 break;
             case 2:
                 car = new Mazda();
+                carName = "Mazda";
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + carType);
@@ -46,6 +60,6 @@ public class CarsApplication {
             car.increaseSpeed();
         }
 
-        return car;
+        return new CarWithNames(carName, car);
     }
 }

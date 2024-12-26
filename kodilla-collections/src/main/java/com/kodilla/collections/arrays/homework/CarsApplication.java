@@ -7,18 +7,10 @@ import com.kodilla.interfaces.homework.Toyota;
 
 import java.util.Random;
 
+import java.util.Random;
+
 public class CarsApplication {
     private static final Random random = new Random();
-
-    static class CarWithNames {
-        String name;
-        Car car;
-
-        CarWithNames(String name, Car car) {
-            this.name = name;
-            this.car = car;
-        }
-    }
 
     public static void main(String[] args) {
         int arraySize = random.nextInt(15) + 1;
@@ -28,8 +20,12 @@ public class CarsApplication {
             cars[i] = drawCar();
         }
 
-        for (CarWithNames carWithName : cars) {
-            CarUtils.describeCar(carWithName.name, carWithName.car);
+        if (cars == null || cars.length == 0) {
+            System.out.println("No cars available.");
+        } else {
+            for (CarWithNames car : cars) {
+                CarUtils.describeCar(car.name, car.car);
+            }
         }
     }
 
@@ -61,5 +57,15 @@ public class CarsApplication {
         }
 
         return new CarWithNames(carName, car);
+    }
+
+    static class CarWithNames {
+        String name;
+        Car car;
+
+        CarWithNames(String name, Car car) {
+            this.name = name;
+            this.car = car;
+        }
     }
 }

@@ -20,6 +20,11 @@ public class Mazda implements Car {
     @Override
     public void decreaseSpeed() {
         speed -= 6;
-        if (speed < 0); speed = 0;
+        if (speed < 0) speed = 0;
+    }
+
+    @Override
+    public String getName() {
+        return "Mazda";
     }
 }

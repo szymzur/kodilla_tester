@@ -22,7 +22,7 @@ public class CarsApplication {
             System.out.println("No cars available.");
         } else {
             for (CarWithNames car : cars) {
-                CarUtils.describeCar(car.name, car.car);
+                CarUtils.describeCar(car.car);
             }
         }
     }

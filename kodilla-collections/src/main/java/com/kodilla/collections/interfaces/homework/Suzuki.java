@@ -22,4 +22,9 @@ public class Suzuki implements Car {
         speed -= 5;
         if (speed < 0) speed = 0;
     }
+
+    @Override
+    public String getName() {
+        return "Suzuki";
+    }
 }

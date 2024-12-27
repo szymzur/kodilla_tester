@@ -1,4 +1,4 @@
-package com.kodilla.interfaces.homework;
+package com.kodilla.collections.interfaces.homework;
 
 public class Suzuki implements Car {
     private int speed;

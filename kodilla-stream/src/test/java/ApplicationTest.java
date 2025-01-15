@@ -46,6 +46,6 @@ public class ApplicationTest {
             String teacherName = student.getTeacher().map(Teacher::getName).orElse("<undefined");
         }
 
-        assertEquals(expectedOutput);
+        assertEquals(expectedOutput, actualOutput);
     }
 }

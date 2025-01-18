@@ -12,7 +12,7 @@ public class WarehouseTest {
     public void setUp() {
         warehouse = new Warehouse();
     }
-
+//Tests adding an order to the warehouse.
     @Test
     public void testAddOrder() {
         Order order = new Order("123");
@@ -25,7 +25,7 @@ public class WarehouseTest {
             fail("Order should exist in the warehouse.");
         }
     }
-
+//Tests retrieval of an existing order from the warehouse.
     @Test
     public void testGetOrderWhenOrderExists() {
         Order order = new Order("456");
@@ -38,14 +38,14 @@ public class WarehouseTest {
             fail("Order should exist in the warehouse.");
         }
     }
-
+//Tests whether the getOrder method throws an exception when the order does not exist.
     @Test
     public void testGetOrderWhenOrderDoesNotExist() {
         assertThrows(OrderDoesntExistException.class, () -> {
             warehouse.getOrder("999");
         });
     }
-
+//Tests picking an order from a warehouse that contains multiple orders.
     @Test
     public void testGetOrderWithMultipleOrders() {
         Order order1 = new Order("111");

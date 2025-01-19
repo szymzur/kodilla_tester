@@ -1,15 +1,21 @@
 package com.kodilla.exception;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AirportRepositoryTestSuite {
+    private AirportRepository airportRepository;
+
+    @BeforeEach
+    public void setUp() {
+        airportRepository = new AirportRepository();
+    }
 
     @Test
     public void testIsAirportInUse() throws AirportNotFoundException {
-        // given
-        AirportRepository airportRepository = new AirportRepository();
         // when
         boolean isWarsawInUse = airportRepository.isAirportInUse("Warsaw");
         // then
@@ -18,8 +24,6 @@ public class AirportRepositoryTestSuite {
 
     @Test
     public void testIsAirportInUse_withException() {
-        // given
-        AirportRepository airportRepository = new AirportRepository();
         // when
         // then
         assertThrows(AirportNotFoundException.class, () -> airportRepository.isAirportInUse("Vienna"));

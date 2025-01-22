@@ -1,6 +1,5 @@
-package com.kodilla.parametrized_tests;
+package com.kodilla.parametrized_tests.homework;
 
-import com.kodilla.parametrized_tests.homework.UserValidator;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 

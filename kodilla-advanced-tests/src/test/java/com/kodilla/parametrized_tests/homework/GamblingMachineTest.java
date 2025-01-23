@@ -6,6 +6,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import java.util.HashSet;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GamblingMachineTest {
 
@@ -35,5 +41,28 @@ public class GamblingMachineTest {
         GamblingMachine machine = new GamblingMachine();
 
         assertThrows(InvalidNumbersException.class, () -> machine.howManyWins(outOfScopeNumbers));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1,2,3,4,5,6"}) // przykład jednej linii z pliku CSV
+    public void testAnyWinsPossible(String csvRow) {
+        Set<Integer> userNumbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+
+        GamblingMachine machine = new GamblingMachine();
+        boolean hasWin = false;
+
+        for (int i = 0; i < 1000; i++) {
+            try {
+                int wins = machine.howManyWins(userNumbers);
+                if (wins > 0) {
+                    hasWin = true;
+                    break;
+                }
+            } catch (InvalidNumbersException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        assertTrue(hasWin, "Expected to find at least one win in 1000 attempts, but got none.");
     }
 }

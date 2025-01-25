@@ -1,81 +1,111 @@
 package com.kodilla.mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.kodilla.mockito.homework.User;
+import com.kodilla.mockito.homework.UserRepository;
+import com.kodilla.mockito.homework.WeatherAlertService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import com.kodilla.mockito.homework.*;
-import org.junit.jupiter.api.*;
 import java.util.*;
 
-public class WeatherAlertTestSuite {
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class WeatherAlertServiceTest {
+    private UserRepository userRepository;
+    private NotificationService notificationService;
     private WeatherAlertService weatherAlertService;
-    private Inhabitant inhabitant;
-    private Location location;
 
     @BeforeEach
     void setUp() {
-        weatherAlertService = mock(WeatherAlertService.class);
-        inhabitant = mock(Inhabitant.class);
-        location = mock(Location.class);
+        userRepository = mock(UserRepository.class);
+        notificationService = mock(NotificationService.class);
+        weatherAlertService = new WeatherAlertService(userRepository, notificationService);
     }
 
     @Test
-    public void shouldAddInhabitantToLocation() {
-        weatherAlertService.addInhabitantToLocation(inhabitant, location);
-        when(weatherAlertService.getInhabitantsForLocation(location))
-                .thenReturn(new HashSet<>(Collections.singletonList(inhabitant)));
+    void testSubscribeUser() {
+        String email = "test@example.com";
+        String location = "Location1";
+        User user = new User(email);
 
-        assertTrue(weatherAlertService.getInhabitantsForLocation(location).contains(inhabitant));
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
+
+        weatherAlertService.subscribeUser(email, location);
+
+        verify(userRepository).saveUser(user);
+
+        assertEquals(Set.of(location), user.getLocations());
     }
 
     @Test
-    public void shouldCancelSubscriptionFromLocation() {
-        weatherAlertService.addInhabitantToLocation(inhabitant, location);
-        weatherAlertService.cancelWeatherAlertsSubscriptionFromLocation(inhabitant, location);
-        when(weatherAlertService.getInhabitantsForLocation(location)).thenReturn(new HashSet<>());
+    void testUnsubscribeUser() {
+        String email = "test@example.com";
+        String location = "Location1";
+        User user = new User(email);
+        user.subscribe(location);
 
-        assertFalse(weatherAlertService.getInhabitantsForLocation(location).contains(inhabitant));
+        // Zwrot użytkownika w mocku userRepository
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
+
+        // Rozsubskrybowanie użytkownika
+        weatherAlertService.unsubscribeUser(email, location);
+
+        // Weryfikacja, że userRepository.saveUser() został wywołany
+        if(user.getLocations().isEmpty()) {
+            verify(userRepository).deleteUser(email);
+        } else {
+            verify(userRepository).saveUser(user);
+        }
+
+        // Sprawdzenie, że lokalizacja jest usunięta z subskrypcji użytkownika
+        assertFalse(user.getLocations().contains(location));
     }
 
     @Test
-    public void shouldCancelSubscriptionFromAllLocations() {
-        Location anotherLocation = mock(Location.class);
-        weatherAlertService.addInhabitantToLocation(inhabitant, location);
-        weatherAlertService.addInhabitantToLocation(inhabitant, anotherLocation);
-        weatherAlertService.cancelWeatherAlertsSubscriptionFromAllLocations(inhabitant);
-        when(weatherAlertService.getInhabitantsForLocation(location)).thenReturn(new HashSet<>());
-        when(weatherAlertService.getInhabitantsForLocation(anotherLocation)).thenReturn(new HashSet<>());
+    void testUnsubscribeUserFromAll() {
+        String email = "test@example.com";
+        User user = new User(email);
+        user.subscribe("Warszawa");
+        user.subscribe("Kraków");
 
-        assertFalse(weatherAlertService.getInhabitantsForLocation(location).contains(inhabitant));
-        assertFalse(weatherAlertService.getInhabitantsForLocation(anotherLocation).contains(inhabitant));
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
+
+        weatherAlertService.unsubscribeUserFromAll(email);
+
+        verify(userRepository, times(1)).deleteUser(email);
+        assertTrue(user.getLocations().isEmpty());
     }
 
     @Test
-    public void shouldSendWeatherAlertForSpecificLocation() {
-        Set<Inhabitant> inhabitants = new HashSet<>(Collections.singletonList(inhabitant));
-        when(weatherAlertService.getInhabitantsForLocation(location)).thenReturn(inhabitants);
+    void testSendAlertToLocation() {
+        String email = "test@example.com";
+        String location = "Warszawa";
+        String message = "Burza nadchodzi!";
+        User user = new User(email);
+        user.subscribe(location);
 
-        weatherAlertService.sendWeatherAlertForLocation(location);
+        when(userRepository.findAllUsers()).thenReturn(List.of(user));
 
-        verify(inhabitant, times(1)).receiveWeatherAlert();
+        weatherAlertService.sendAlertToLocation(location, message);
+
+        verify(notificationService, times(1)).sendNotification(email, message);
     }
 
     @Test
-    public void shouldSendWeatherAlertToAllInhabitants() {
-        Set<Inhabitant> allInhabitants = new HashSet<>(Collections.singletonList(inhabitant));
-        when(weatherAlertService.getAllInhabitants()).thenReturn(allInhabitants);
+    void testSendAlertToAll() {
+        String email1 = "test1@example.com";
+        String email2 = "test2@example.com";
+        String message = "Nowy regulamin!";
 
-        weatherAlertService.sendWeatherAlertForAll();
+        User user1 = new User(email1);
+        User user2 = new User(email2);
 
-        verify(inhabitant, times(1)).receiveWeatherAlert();
-    }
+        when(userRepository.findAllUsers()).thenReturn(List.of(user1, user2));
 
-    @Test
-    public void shouldRemoveLocation() {
-        weatherAlertService.addLocation(location);
-        weatherAlertService.removeLocation(location);
-        when(weatherAlertService.getAllLocations()).thenReturn(new HashSet<>());
+        weatherAlertService.sendAlertToAll(message);
 
-        assertFalse(weatherAlertService.getAllLocations().contains(location));
+        verify(notificationService, times(1)).sendNotification(email1, message);
+        verify(notificationService, times(1)).sendNotification(email2, message);
     }
 }

@@ -1,73 +1,57 @@
 package com.kodilla.mockito.homework;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class WeatherAlertService {
+    private UserRepository userRepository;
+    private NotificationService notificationService;
 
-    private Set<Location> locations = new HashSet<>();
-    private Map<Location, Set<Inhabitant>> locationInhabitants = new HashMap<>();
-
-    // Dodajemy użytkownika do lokalizacji
-    public void addInhabitantToLocation(Inhabitant inhabitant, Location location) {
-        locationInhabitants
-                .computeIfAbsent(location, k -> new HashSet<>())
-                .add(inhabitant);
+    public WeatherAlertService(UserRepository userRepository, NotificationService notificationService) {
+        this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
-    // Anulujemy subskrypcję dla użytkownika z danej lokalizacji
-    public void cancelWeatherAlertsSubscriptionFromLocation(Inhabitant inhabitant, Location location) {
-        Set<Inhabitant> inhabitants = locationInhabitants.get(location);
-        if (inhabitants != null) {
-            inhabitants.remove(inhabitant);
-        }
+    public void subscribeUser(String email, String location) {
+        User user = userRepository.findUserByEmail(email).orElse(new User(email));
+        user.subscribe(location);
+        userRepository.saveUser(user);
     }
 
-    // Anulujemy subskrypcję dla użytkownika ze wszystkich lokalizacji
-    public void cancelWeatherAlertsSubscriptionFromAllLocations(Inhabitant inhabitant) {
-        locationInhabitants.values().forEach(inhabitants -> inhabitants.remove(inhabitant));
+    public void unsubscribeUser(String email, String location) {
+        userRepository.findUserByEmail(email).ifPresent(user -> {
+            user.unsubscribe(location);
+            if (user.getLocations().isEmpty()) {
+                userRepository.deleteUser(email);
+            } else {
+                userRepository.saveUser(user);
+            }
+        });
     }
 
-    // Wysyłamy powiadomienie dla danej lokalizacji
-    public void sendWeatherAlertForLocation(Location location) {
-        Set<Inhabitant> inhabitants = locationInhabitants.get(location);
-        if (inhabitants != null) {
-            inhabitants.forEach(Inhabitant::receiveWeatherAlert);
-        }
+    public void unsubscribeUserFromAll(String email) {
+        userRepository.findUserByEmail(email).ifPresent(user -> {
+            user.unsubscribeAll();
+            userRepository.deleteUser(email);
+        });
     }
 
-    // Wysyłamy powiadomienie dla wszystkich
-    public void sendWeatherAlertForAll() {
-        locationInhabitants.values().stream()
-                .flatMap(Set::stream)
-                .forEach(Inhabitant::receiveWeatherAlert);
+    public void sendAlertToLocation(String location, String message) {
+        userRepository.findAllUsers().stream()
+                .filter(user -> user.getLocations().contains(location))
+                .forEach(user -> notificationService.sendNotification(user.getEmail(), message));
     }
 
-    // Dodajemy nową lokalizację
-    public void addLocation(Location location) {
-        locations.add(location);
+    public void sendAlertToAll(String message) {
+        userRepository.findAllUsers().forEach(user ->
+                notificationService.sendNotification(user.getEmail(), message));
     }
 
-    // Usuwamy lokalizację
-    public void removeLocation(Location location) {
-        locations.remove(location);
-        locationInhabitants.remove(location);
-    }
-
-    // Pobieramy mieszkańców dla danej lokalizacji
-    public Set<Inhabitant> getInhabitantsForLocation(Location location) {
-        return locationInhabitants.getOrDefault(location, new HashSet<>());
-    }
-
-    // Pobieramy wszystkie lokalizacje
-    public Set<Location> getAllLocations() {
-        return locations;
-    }
-
-    // Pobieramy wszystkich mieszkańców
-    public Set<Inhabitant> getAllInhabitants() {
-        return locationInhabitants.values().stream()
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
+    public void deleteLocation(String location) {
+        userRepository.findAllUsers().forEach(user -> {
+            user.unsubscribe(location);
+            if (user.getLocations().isEmpty()) {
+                userRepository.deleteUser(user.getEmail());
+            } else {
+                userRepository.saveUser(user);
+            }
+        });
     }
 }

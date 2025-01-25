@@ -35,14 +35,12 @@ public class ShopTestSuite {
     public void testGetOrdersBetweenDates() throws ParseException {
         Date startDate = dateFormat.parse("2025-01-01");
         Date endDate = dateFormat.parse("2025-01-31");
-        List<Order> orders = shop.getOrdersBetweenDates(startDate, endDate);
-        assertEquals(2, orders.size());
+        assertEquals(2, shop.getOrdersBetweenDates(startDate, endDate).size());
     }
 
     @Test
     public void testGetOrdersByValueRange() {
-        List<Order> orders = shop.getOrdersByValueRange(100.0, 300.0);
-        assertEquals(3, orders.size());
+        assertEquals(3, shop.getOrdersByValueRange(100.0, 300.0).size());
     }
 
     @Test

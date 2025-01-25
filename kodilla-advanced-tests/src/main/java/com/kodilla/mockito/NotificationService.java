@@ -8,7 +8,7 @@ import java.util.Set;
 import com.kodilla.notification.Client;
 import com.kodilla.notification.Notification;
 
-public class NotificationService {
+public class NotificationService implements com.kodilla.mockito.homework.NotificationService {
 
     private Set<Client> clients = new HashSet<>();
 
@@ -22,5 +22,9 @@ public class NotificationService {
 
     public void removeSubscriber(Client client) {
         this.clients.remove(client);
+    }
+
+    public void sendNotification(String mail, String message) {
+        this.sendNotification("example@example.com", message);
     }
 }

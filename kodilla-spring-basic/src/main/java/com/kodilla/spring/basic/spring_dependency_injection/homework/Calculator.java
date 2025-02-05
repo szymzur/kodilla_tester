@@ -37,7 +37,7 @@ public class Calculator {
             display.display(result);
             return result;
         } else {
-            System.out.println("Nie można dzielić przez zero!");
+            System.out.println("You cannot divide by ZERO");
             return Double.NaN;
         }
     }

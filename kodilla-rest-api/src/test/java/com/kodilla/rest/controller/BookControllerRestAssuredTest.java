@@ -15,11 +15,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -27,12 +27,12 @@ import static org.hamcrest.Matchers.equalTo;
 class BookControllerRestAssuredTest {
     @Mock
     private BookService bookService;
-    @InjectMocks  // [1]
+    @InjectMocks
     private BookController bookController;
 
     @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
-        RestAssuredMockMvc.standaloneSetup(bookController);  // [2]
+        RestAssuredMockMvc.standaloneSetup(bookController);
     }
 
     @Test
@@ -45,10 +45,10 @@ class BookControllerRestAssuredTest {
                 );
         // when then
         when()
-                .get("/books")  // [3]
+                .get("/books")
                 .then()
-                .body("$.size()", equalTo(2))  // [4]
-                .body("[0].title", equalTo("Title 1"))    // [5]
+                .body("$.size()", equalTo(2))
+                .body("[0].title", equalTo("Title 1"))
                 .body("[0].author", equalTo("Author 2"))
                 .body("[1].title", equalTo("Title 2"))
                 .body("[1].author", equalTo("Author 2"))
@@ -59,16 +59,15 @@ class BookControllerRestAssuredTest {
     void shouldUpdatePost() {
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
 
-        String updatedPost = "{\n" +
-                "  \"id\": 1,\n" +
-                "  \"title\": \"Updated Title\",\n" +
-                "  \"body\": \"Updated body content\",\n" +
-                "  \"userId\": 1\n" +
-                "}";
+        Map<String, Object> updatedPostData = new HashMap<>();
+        updatedPostData.put("id", 1);
+        updatedPostData.put("title", "Updated Title");
+        updatedPostData.put("body", "Updated body content");
+        updatedPostData.put("userId", 1);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(updatedPost)
+                .body(updatedPostData)
                 .when()
                 .put("/posts/1")
                 .then()

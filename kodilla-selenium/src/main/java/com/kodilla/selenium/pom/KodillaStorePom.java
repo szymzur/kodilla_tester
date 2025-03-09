@@ -1,40 +1,43 @@
 package com.kodilla.selenium.pom;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 public class KodillaStorePom extends AbstractPom {
 
-    @FindBy(css = "input[type='search']")
-    WebElement searchField;
-
-    @FindBy(css = "section > article")
-    List<WebElement> searchResults;
+    @FindBy(css = "input[name='search']")
+    private WebElement searchField;
 
     public KodillaStorePom(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public void searchFor(String query) {
-        searchField.clear();
-        searchField.sendKeys(query);
-        searchField.submit();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfAllElements(searchResults));
-    }
+    public int getSearchResultsCount(String searchPhrase) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value='" + searchPhrase + "';", searchField);
+        js.executeScript("arguments[0].dispatchEvent(new Event('change'))", searchField);
+        js.executeScript("arguments[0].dispatchEvent(new Event('submit'))", searchField);
 
-    public int getSearchResultsCount() {
-        // Debug print to check if searchResults is populated
-        System.out.println("Number of results found: " + searchResults.size());
-        for (WebElement result : searchResults) {
-            System.out.println(result.getText());
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return searchResults.size();
+
+        List<WebElement> products = driver.findElements(By.cssSelector("div.element"));
+        System.out.println("Liczba znalezionych elementów: " + products.size());
+
+        for (WebElement product : products) {
+            System.out.println("Znaleziony produkt: " + product.getText());
+        }
+
+        return products.size();
     }
 }

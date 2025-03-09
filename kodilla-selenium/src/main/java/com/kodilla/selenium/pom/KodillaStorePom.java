@@ -20,17 +20,20 @@ public class KodillaStorePom extends AbstractPom {
     }
 
     public int getSearchResultsCount(String searchPhrase) {
+        System.out.println("Wpisywanie frazy wyszukiwania: " + searchPhrase);
+
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].value='" + searchPhrase + "';", searchField);
         js.executeScript("arguments[0].dispatchEvent(new Event('change'))", searchField);
         js.executeScript("arguments[0].dispatchEvent(new Event('submit'))", searchField);
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(5000); //
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        System.out.println("Szukanie elementów wyników...");
         List<WebElement> products = driver.findElements(By.cssSelector("div.element"));
         System.out.println("Liczba znalezionych elementów: " + products.size());
 

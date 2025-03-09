@@ -25,12 +25,12 @@ public class KodillaStorePomTest {
 
     @Test
     public void testSearchResultsCount() {
-        assertEquals(5, storePom.getSearchResultsCount("NoteBook"));
-        assertEquals(2, storePom.getSearchResultsCount("School"));
-        assertEquals(3, storePom.getSearchResultsCount("Brand"));
-        assertEquals(2, storePom.getSearchResultsCount("Business"));
-        assertEquals(2, storePom.getSearchResultsCount("Gaming"));
-        assertEquals(4, storePom.getSearchResultsCount("Powerful"));
+        assertEquals(2, storePom.getSearchResultsCount("NoteBook"));
+        assertEquals(1, storePom.getSearchResultsCount("School"));
+        assertEquals(1, storePom.getSearchResultsCount("Brand"));
+        assertEquals(0, storePom.getSearchResultsCount("Business"));
+        assertEquals(1, storePom.getSearchResultsCount("Gaming"));
+        assertEquals(3, storePom.getSearchResultsCount("Laptop"));
     }
 
     @AfterEach

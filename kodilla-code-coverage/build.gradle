@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'checkstyle'
+    id "com.github.spotbugs" version "6.0.14"
+}
+
+group = 'com.kodilla'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Zależności do testów
+    testImplementation 'junit:junit:4.13.2' // Dla JUnit 4
+    testImplementation platform('org.junit:junit-bom:5.10.0') // Dla JUnit 5 (jeśli się zdecydujesz)
+    testImplementation 'org.junit.jupiter:junit-jupiter' // Dla JUnit 5
+}
+
+test {
+    useJUnitPlatform() // Umożliwia uruchamianie testów JUnit 5, jeśli są używane
+}
+
+jacocoTestReport {
+    dependsOn test // Raport generuje się po wykonaniu testów
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true // Upewnij się, że to ustawienie jest włączone
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/test/html') // Określa lokalizację raportu HTML
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            includes = ['com.kodilla.jacoco.*']
+
+            limit {
+                counter = 'BRANCH' // Pokrycie decyzji
+                value = 'COVERED_RATIO' // Wymagane pokrycie
+                minimum = 1.0 // 100% pokrycia
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+
+checkstyle {
+    toolVersion "8.30"
+    configFile = file("checkstyle.xml")
+}
+
+spotbugs {
+    ignoreFailures = true
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+        }
+    }
+}
+
+spotbugsTest {
+    reports {
+        html {
+            required = true
+        }
+    }
+}

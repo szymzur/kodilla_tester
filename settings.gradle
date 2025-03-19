@@ -9,4 +9,6 @@ include 'kodilla-spring-basic'
 include 'kodilla-rest-api'
 include 'kodilla-selenium'
 include 'kodilla-cucumber'
+include 'kodilla-code-coverage'
+include 'kodilla-code-coverage'
 

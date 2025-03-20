@@ -17,6 +17,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2' // Dla JUnit 4
     testImplementation platform('org.junit:junit-bom:5.10.0') // Dla JUnit 5 (jeśli się zdecydujesz)
     testImplementation 'org.junit.jupiter:junit-jupiter' // Dla JUnit 5
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.2.0'
 }
 
 test {

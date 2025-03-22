@@ -18,19 +18,19 @@ class TaskListRepositoryTestSuite {
     void testFindByListName() {
         // Given
         TaskList taskList = new TaskList("Test List", "This is a test description");
-        taskListRepository.save(taskList); // zapisujemy TaskList w bazie danych
+        taskListRepository.save(taskList);
         String listName = taskList.getListName();
 
         // When
         List<TaskList> result = taskListRepository.findByListName(listName);
 
         // Then
-        Assertions.assertEquals(1, result.size()); // upewniamy się, że znaleziono dokładnie jeden wynik
-        Assertions.assertEquals("Test List", result.get(0).getListName()); // weryfikujemy nazwę listy
-        Assertions.assertEquals("This is a test description", result.get(0).getDescription()); // weryfikujemy opis
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals("Test List", result.get(0).getListName());
+        Assertions.assertEquals("This is a test description", result.get(0).getDescription());
 
         // CleanUp
-        int id = result.get(0).getId(); // pobieramy ID zapisanego zadania
-        taskListRepository.deleteById(id); // usuwamy dane z bazy
+        int id = result.get(0).getId();
+        taskListRepository.deleteById(id);
     }
 }

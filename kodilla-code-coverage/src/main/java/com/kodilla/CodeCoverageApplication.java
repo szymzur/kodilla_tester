@@ -1,4 +1,4 @@
-package com.kodilla.jdbc;
+package com.kodilla;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
